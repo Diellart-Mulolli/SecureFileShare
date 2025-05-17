@@ -30,4 +30,21 @@ export async function registerUser(e, tempDB) {
         alert("Emri i përdoruesit ekziston");
         return;
     }
+    try {
+        const { publicKey, privateKey } = await generateKeyPair();
+        const user = {
+            id: Date.now().toString(),
+            username,
+            password,
+            publicKey,
+            privateKey
+        };
+        tempDB.users.push(user);
+        alert("Regjistrimi u krye me sukses");
+        bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+        document.getElementById('registerForm').reset();
+    } catch (err) {
+        console.error("Gabim gjatë regjistrimit:", err);
+        alert("Regjistrimi dështoi");
+    }
 }
