@@ -18,4 +18,7 @@ const recipientKey = await window.crypto.subtle.importKey("jwk", recipient.publi
     name: "RSA-OAEP", hash: "SHA-256"
 }, true, ["encrypt"]);
 
+const reEncryptedKey = await window.crypto.subtle.encrypt({ name: "RSA-OAEP" }, recipientKey, decryptedAesKey);
+
+
 
