@@ -64,14 +64,6 @@ Ky projekt është zhvilluar nga:
 3. Delvina Elshani
 4. Dren Xhyliqi
 
-
-| Emri | Përgjegjësia |
-|------|--------------|
-| | Autentifikimi dhe çelësat RSA |
-| | Menaxhimi dhe kriptimi i skedarëve |
-| | Editimi dhe dekriptimi i përmbajtjes |
-| | Logjika e ndarjes dhe kontrolli i lejeve |
-
 ---
 
 ##  Na kontaktoni
