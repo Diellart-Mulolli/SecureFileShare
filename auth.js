@@ -16,3 +16,18 @@ export async function generateKeyPair() {
         privateKey: await window.crypto.subtle.exportKey("jwk", keyPair.privateKey)
     };
 }
+export async function registerUser(e, tempDB) {
+    e.preventDefault();
+    const username = document.getElementById('registerUsername').value.trim();
+    const password = document.getElementById('registerPassword').value.trim();
+
+    if (!username || !password || username.length < 4 || password.length < 6) {
+        alert("Fushat janë të zbrazëta ose nuk përmbushin kriteret");
+        return;
+    }
+
+    if (tempDB.users.some(u => u.username === username)) {
+        alert("Emri i përdoruesit ekziston");
+        return;
+    }
+}
