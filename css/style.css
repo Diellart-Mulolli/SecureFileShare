@@ -1,0 +1,75 @@
+.file-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #0d6efd;
+}
+
+#dropZone, #imageDropZone {
+    border: 2px dashed #0d6efd;
+    border-radius: 5px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#dropZone.dragover, #imageDropZone.dragover {
+    background-color: #f0f7ff;
+}
+
+.file-card {
+    transition: transform 0.2s;
+}
+
+.file-card:hover {
+    transform: translateY(-5px);
+}
+
+#editorContainer {
+    margin-top: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 0;
+}
+
+#fileContent {
+    width: 100%;
+    min-height: 300px;
+    padding: 15px;
+    border: none;
+    resize: vertical;
+}
+
+.editor-header {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 5px 5px 0 0;
+}
+
+.image-thumbnail-container {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-bar {
+    transition: width 0.3s ease;
+}
+
+.permission-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.read-only-badge {
+    background-color: #6c757d;
+}
+
+.read-write-badge {
+    background-color: #198754;
+}
