@@ -14,3 +14,8 @@ const decryptedAesKey = await window.crypto.subtle.decrypt(
     new Uint8Array(file.encryptedKey)
 );
 
+const recipientKey = await window.crypto.subtle.importKey("jwk", recipient.publicKey, {
+    name: "RSA-OAEP", hash: "SHA-256"
+}, true, ["encrypt"]);
+
+
