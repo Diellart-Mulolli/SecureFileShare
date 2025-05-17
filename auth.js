@@ -62,3 +62,7 @@ export function loginUser(e, tempDB, updateUI) {
         alert("Kredenciale të pavlefshme");
     }
 }
+export function logout(updateUI) {
+    currentUser = null;
+    updateUI();
+}
