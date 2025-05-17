@@ -20,5 +20,16 @@ const recipientKey = await window.crypto.subtle.importKey("jwk", recipient.publi
 
 const reEncryptedKey = await window.crypto.subtle.encrypt({ name: "RSA-OAEP" }, recipientKey, decryptedAesKey);
 
+tempDB.sharedFiles.push({
+    id: Date.now().toString(),
+    fileId: selectedFile,
+    recipientId: recipient.id,
+    encryptedKey: Array.from(new Uint8Array(reEncryptedKey)),
+    permission: permission
+});
+
+callback(null);
+
+
 
 
