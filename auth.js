@@ -48,3 +48,17 @@ export async function registerUser(e, tempDB) {
         alert("Regjistrimi dështoi");
     }
 }
+export function loginUser(e, tempDB, updateUI) {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const user = tempDB.users.find(u => u.username === username && u.password === password);
+    if (user) {
+        currentUser = user;
+        updateUI();
+        bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+        document.getElementById('loginForm').reset();
+    } else {
+        alert("Kredenciale të pavlefshme");
+    }
+}
