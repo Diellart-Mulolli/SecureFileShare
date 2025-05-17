@@ -14,3 +14,19 @@ function init() {
 
     // ... Add other button listeners for share, create, edit, etc.
 }
+function updateUI() {
+    const userSection = document.getElementById("userSection");
+    const privateView = document.getElementById("privateView");
+    const publicView = document.getElementById("publicView");
+
+    if (auth.currentUser) {
+        userSection.classList.remove("d-none");
+        publicView.classList.add("d-none");
+        privateView.classList.remove("d-none");
+        // Load files etc.
+    } else {
+        userSection.classList.add("d-none");
+        publicView.classList.remove("d-none");
+        privateView.classList.add("d-none");
+    }
+}
