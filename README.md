@@ -1,4 +1,4 @@
-# 🔐 SecureFile – Menaxhim i File-ave me Kriptim
+# 🔐 SecureFile – Menaxhim i File-ave me Enkriptim
 > Një aplikacion i thjeshtë por funksional për ruajtjen, editimin dhe ndarjen e skedarëve në mënyrë të sigurt duke përdorur **kriptim hibrid (RSA + AES)**.
 
 ---
