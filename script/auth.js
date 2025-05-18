@@ -1,35 +1,37 @@
-export let currentUser = null;
+import { generateKeyPair } from './fileManager.js';
+import { updateUI } from './main.js';
 
-export async function generateKeyPair() {
-    const keyPair = await window.crypto.subtle.generateKey(
-        {
-            name: "RSA-OAEP",
-            modulusLength: 2048,
-            publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-            hash: "SHA-256"
-        },
-        true,
-        ["encrypt", "decrypt"]
-    );
-    return {
-        publicKey: await window.crypto.subtle.exportKey("jwk", keyPair.publicKey),
-        privateKey: await window.crypto.subtle.exportKey("jwk", keyPair.privateKey)
-    };
-}
-export async function registerUser(e, tempDB) {
+async function registerUser(e) {
     e.preventDefault();
+    console.log('Register form submitted');
     const username = document.getElementById('registerUsername').value.trim();
     const password = document.getElementById('registerPassword').value.trim();
+    const tempDB = window.tempDB;
 
-    if (!username || !password || username.length < 4 || password.length < 6) {
-        alert("Fushat janë të zbrazëta ose nuk përmbushin kriteret");
+    if (!username || !password) {
+        alert('Please fill all fields');
+        console.log('Registration failed: Missing fields');
+        return;
+    }
+
+    if (username.length < 4) {
+        alert('Username must be at least 4 characters');
+        console.log('Registration failed: Username too short');
+        return;
+    }
+
+    if (password.length < 6) {
+        alert('Password must be at least 6 characters');
+        console.log('Registration failed: Password too short');
         return;
     }
 
     if (tempDB.users.some(u => u.username === username)) {
-        alert("Emri i përdoruesit ekziston");
+        alert('Username already exists');
+        console.log('Registration failed: Username exists');
         return;
     }
+
     try {
         const { publicKey, privateKey } = await generateKeyPair();
         const user = {
@@ -40,29 +42,44 @@ export async function registerUser(e, tempDB) {
             privateKey
         };
         tempDB.users.push(user);
-        alert("Regjistrimi u krye me sukses");
+        alert('Registration successful! Please login.');
+        console.log('User registered:', username);
         bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
         document.getElementById('registerForm').reset();
-    } catch (err) {
-        console.error("Gabim gjatë regjistrimit:", err);
-        alert("Regjistrimi dështoi");
+    } catch (error) {
+        alert('Registration failed: ' + error.message);
+        console.error('Registration error:', error);
     }
 }
-export function loginUser(e, tempDB, updateUI) {
+
+function loginUser(e) {
     e.preventDefault();
+    console.log('Login form submitted');
     const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
+    const tempDB = window.tempDB;
+
+    if (!username || !password) {
+        alert('Please fill all fields');
+        console.log('Login failed: Missing fields');
+        return;
+    }
+
     const user = tempDB.users.find(u => u.username === username && u.password === password);
     if (user) {
-        currentUser = user;
+        window.currentUser = user;
+        console.log('Login successful:', username);
+        console.log('Public Key:');
+        console.table(user.publicKey);
+        console.log('Private Key:');
+        console.table(user.privateKey);
         updateUI();
         bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
         document.getElementById('loginForm').reset();
     } else {
-        alert("Kredenciale të pavlefshme");
+        alert('Invalid username or password');
+        console.log('Login failed: Invalid credentials');
     }
 }
-export function logout(updateUI) {
-    currentUser = null;
-    updateUI();
-}
+
+export { registerUser, loginUser };

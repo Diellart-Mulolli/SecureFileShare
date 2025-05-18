@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure File Share</title>
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="#"><i class="bi bi-shield-lock"></i> SecureShare</a>
             <div id="userSection" class="d-none">
                 <span class="navbar-text me-3" id="usernameDisplay"></span>
+                <button class="btn btn-outline-light me-2" id="viewKeysBtn" data-bs-toggle="modal" data-bs-target="#keysModal">
+                    <i class="bi bi-key"></i> View Keys
+                </button>
                 <button class="btn btn-outline-light" id="logoutBtn">
                     <i class="bi bi-box-arrow-right"></i> Logout
                 </button>
@@ -33,21 +31,17 @@
                 <h1 class="display-4">Secure File Sharing</h1>
                 <p class="lead">Encrypt and share files with end-to-end encryption</p>
                 <hr class="my-4">
-                <p>Your files are encrypted before leaving your device and can only be decrypted by authorized
-                    recipients
-                </p>
+                <p>Your files are encrypted before leaving your device and can only be decrypted by authorized recipients</p>
                 <div class="mt-4">
                     <button class="btn btn-primary btn-lg me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
                         <i class="bi bi-box-arrow-in-right"></i> Login
                     </button>
-                    <button class="btn btn-outline-primary btn-lg" data-bs-toggle="modal"
-                        data-bs-target="#registerModal">
+                    <button class="btn btn-outline-primary btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal">
                         <i class="bi bi-person-plus"></i> Register
                     </button>
                 </div>
             </div>
         </div>
-
 
         <div id="privateView" class="d-none">
             <div class="d-flex justify-content-between mb-4 align-items-center">
@@ -57,14 +51,10 @@
                 </button>
             </div>
 
-            <div class="row" id="fileList">
-                <!-- Files will be loaded here -->
-            </div>
+            <div class="row" id="fileList"></div>
 
             <h2 class="mt-5"><i class="bi bi-people"></i> Shared With Me</h2>
-            <div class="row" id="sharedFileList">
-                <!-- Shared files will be loaded here -->
-            </div>
+            <div class="row" id="sharedFileList"></div>
 
             <div id="editorContainer" class="d-none">
                 <div class="editor-header d-flex justify-content-between align-items-center">
@@ -83,8 +73,6 @@
         </div>
     </div>
 
-
-    <!-- Modals -->
     <div class="modal fade" id="loginModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -147,41 +135,52 @@
                 <div class="modal-body">
                     <ul class="nav nav-tabs mb-3" id="uploadTabs">
                         <li class="nav-item">
-                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#textTab">Text
-                                File</button>
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#writeTextTab">Write Text File</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#imageTab">Image File</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#uploadTextTab">Upload Text File</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#imageTab">Upload Image File</button>
                         </li>
                     </ul>
-
                     <div class="tab-content">
-                        <!-- Text File Tab -->
-                        <div class="tab-pane fade show active" id="textTab">
+                        <div class="tab-pane fade show active" id="writeTextTab">
                             <div class="mb-3">
                                 <label for="fileName" class="form-label">File Name</label>
-                                <input type="text" class="form-control" id="fileName" placeholder="example.txt"
-                                    required>
+                                <input type="text" class="form-control" id="fileName" placeholder="example.txt" required>
                             </div>
                             <div class="mb-3">
                                 <label for="fileText" class="form-label">Content</label>
-                                <textarea class="form-control" id="fileText" rows="5"
-                                    placeholder="Enter your text content here..."></textarea>
+                                <textarea class="form-control" id="fileText" rows="5" placeholder="Enter your text content here..."></textarea>
                             </div>
                         </div>
-
-                        <!-- Image File Tab -->
+                        <div class="tab-pane fade" id="uploadTextTab">
+                            <div id="textDropZone">
+                                <i class="bi bi-file-earmark-text file-icon"></i>
+                                <p>Drag & drop text file here or click to browse</p>
+                                <input type="file" id="textInput" accept=".txt" class="d-none">
+                            </div>
+                            <div class="mt-3">
+                                <label for="textFileName" class="form-label">File Name</label>
+                                <input type="text" class="form-control" id="textFileName" placeholder="example.txt" required>
+                            </div>
+                            <div class="mt-3 d-none" id="textPreviewContainer">
+                                <label class="form-label">Preview</label>
+                                <div class="border p-2">
+                                    <pre id="textPreview" style="max-height: 200px; overflow-y: auto;"></pre>
+                                </div>
+                            </div>
+                        </div>
                         <div class="tab-pane fade" id="imageTab">
                             <div id="imageDropZone">
                                 <i class="bi bi-image file-icon"></i>
                                 <p>Drag & drop image here or click to browse</p>
-                                <input type="file" id="imageInput" accept="image/jpeg,image/png,image/gif"
-                                    class="d-none">
+                                <input type="file" id="imageInput" accept="image/jpeg,image/png,image/gif" class="d-none">
                             </div>
                             <div class="mt-3">
                                 <label for="imageFileName" class="form-label">File Name</label>
-                                <input type="text" class="form-control" id="imageFileName" placeholder="example.png"
-                                    required>
+                                <input type="text" class="form-control" id="imageFileName" placeholder="example.png" required>
                             </div>
                             <div class="mt-3 d-none" id="imagePreviewContainer">
                                 <label class="form-label">Preview</label>
@@ -217,15 +216,13 @@
                     <div class="mb-3">
                         <label class="form-label">Permissions</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="sharePermission" id="readOnlyPermission"
-                                value="read" checked>
+                            <input class="form-check-input" type="radio" name="sharePermission" id="readOnlyPermission" value="read" checked>
                             <label class="form-check-label" for="readOnlyPermission">
                                 Read-only (view only)
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="sharePermission" id="readWritePermission"
-                                value="write">
+                            <input class="form-check-input" type="radio" name="sharePermission" id="readWritePermission" value="write">
                             <label class="form-check-label" for="readWritePermission">
                                 Read-write (view and edit)
                             </label>
@@ -243,8 +240,6 @@
         </div>
     </div>
 
-
-    <!-- Image View Modal -->
     <div class="modal fade" id="imageViewModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -262,7 +257,6 @@
         </div>
     </div>
 
-    <!-- Text View Modal -->
     <div class="modal fade" id="textViewModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -271,8 +265,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <pre id="textViewContent" class="form-control"
-                        style="height: 400px; overflow-y: auto; background-color: #f8f9fa; border: none;"></pre>
+                    <pre id="textViewContent" class="form-control" style="height: 400px; overflow-y: auto; background-color: #f8f9fa; border: none;"></pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -281,17 +274,44 @@
         </div>
     </div>
 
-    <!-- Funksionalitetet JS -->
-    <script src="script/main.js"></script>
-    <script src="script/auth.js"></script>
-    <script src="script/fileEditor.js"></script>
-    <script src="script/fileManager.js"></script>
-    <script src="script/share.js"></script>
+    <div class="modal fade" id="keysModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-key"></i> Your Encryption Keys</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Warning:</strong> Your private key is sensitive. Do not share it with anyone. Keep it secure and do not lose it, as it is required to decrypt your files.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Public Key</strong></label>
+                        <button class="btn btn-outline-primary ms-2" id="copyPublicKeyBtn" style="margin-left:10px; margin-bottom:10px;">
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                        <div class="d-flex align-items-center">
+                            <pre id="publicKeyDisplay" class="key-display flex-grow-1"></pre>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Private Key</strong></label>
+                        <button class="btn btn-outline-primary ms-2" id="copyPrivateKeyBtn" style="margin-left:10px; margin-bottom:10px;">
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                        <div class="d-flex align-items-center">
+                            <pre id="privateKeyDisplay" class="key-display flex-grow-1"></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Bootstrap JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="script/main.js"></script>
 </body>
-
 </html>
