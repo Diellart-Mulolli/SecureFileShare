@@ -56,6 +56,26 @@ Projekti ndahet në disa skedarë për funksionalitete specifike:
 
 ---
 
+## 📸 Screenshots
+Pamje nga ndërfaqja e aplikacionit në veprim:
+
+🔐 Faqja e Hyrjes (Login/Register)
+<img src="screenshots/login.png" alt="Login Page" width="600"/>
+---
+
+🗂️ Paneli Kryesor (Dashboard)
+<img src="screenshots/dashboard.png" alt="Main Dashboard" width="600"/>
+---
+
+📝 Ngarkimi i një file-i ose imazhi 
+<img src="screenshots/upload.png" alt="File Editor" width="600"/>
+---
+
+📤 Ndarja e Skedarëve me Përdorues të Tjerë
+<img src="screenshots/share.png" alt="File Sharing" width="600"/>
+
+---
+
 ##  Ekipi
 
 Ky projekt është zhvilluar nga:
